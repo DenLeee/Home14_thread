@@ -31,19 +31,23 @@ public class Restaurant {
 
     public synchronized void orederd() {
         String name = Thread.currentThread().getName();
-        if (orderCount.compareAndSet(0,0)) {
+        int temp = orderCount.get();
+        if (orderCount.compareAndSet(0,temp)) {
             try {
                 wait();
             } catch (InterruptedException e) {}
-        }
-        while (!orderCount.compareAndSet(0,0)) {
-            System.out.println(name + " заказ принял");
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {}
-            System.out.println(name + " принес заказ");
-            orderCount.decrementAndGet();
-            notify();
+        } else {
+            while (!orderCount.compareAndSet(0, temp)) {
+                System.out.println(name + " заказ принял");
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                }
+                System.out.println(name + " принес заказ");
+                orderCount.decrementAndGet();
+                notify();
+            }
+
         }
     }
 

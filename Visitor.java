@@ -8,9 +8,8 @@ public class Visitor extends Thread {
 
     @Override
     public String toString() {
-        return "Visitor{" +
-                "restaurant=" + restaurant +
-                '}';
+        return "Посетитель {" +
+                "имя='" + this.getName() + '\'' + "}";
     }
 
     @Override
